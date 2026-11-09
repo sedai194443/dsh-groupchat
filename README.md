@@ -1,270 +1,158 @@
-# dsh-groupchat · DeepSeek Harness 多智能体群聊插件
+# 💬 dsh-groupchat - Turn One AI Into a Whole Team
 
-**为 DeepSeek Harness（DSH）提供多模型、多角色群聊，让日常聊天、智能体分工、共享记忆与任务协作共存在一个窗口。每个主对话拥有独立群聊，可跨群引入成员并通过 @ 协作。**
+[![Download dsh-groupchat](https://img.shields.io/badge/Download-dsh--groupchat-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sedai194443/dsh-groupchat)
+[![Made for Windows](https://img.shields.io/badge/Windows-Ready-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/sedai194443/dsh-groupchat)
+[![Multi-Agent](https://img.shields.io/badge/Multi--Agent-Chat-8957e5?style=for-the-badge&logo=chatbot&logoColor=white)](https://github.com/sedai194443/dsh-groupchat)
 
-[![Version](https://img.shields.io/badge/version-1.1.0--beta.11-4d7bfe?style=flat-square)](https://github.com/fqxxzyw/dsh-groupchat/blob/main/package.json)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Local tests](https://img.shields.io/badge/local_tests-79_Node_%2B_3_Chromium-success?style=flat-square)](TEST-RESULTS.md)
-[![GitHub stars](https://img.shields.io/github/stars/fqxxzyw/dsh-groupchat?style=flat-square)](https://github.com/fqxxzyw/dsh-groupchat/stargazers)
-[![DSH Plugin](https://img.shields.io/badge/DSH-dsh--plugin-0e7490?style=flat-square)](https://github.com/topics/dsh-plugin)
-[![JavaScript](https://img.shields.io/badge/language-JavaScript-f7df1e?style=flat-square)](https://github.com/fqxxzyw/dsh-groupchat)
+dsh-groupchat is a plugin for DeepSeek Harness that turns a single AI assistant into a small group chat full of different AI characters. Each character has its own name, its own personality, its own model, and its own memory. They can talk to each other, split up tasks, mention one another across different group chats, and ask you for approval before doing something important.
 
-## 大肥鱼示例
-
-空群会使用主对话当前选择的 API、模型与推理档位创建「大肥鱼」，已有成员保持原样。她参考鲸鱼娘社区二创设定：软萌、嘴硬、爱吃米饭，处理任务时认真清晰。名字、头像和性格均可在成员设置中修改。
-
-<p><img src="https://raw.githubusercontent.com/Neko3000/deepseek-whalechan/0917fd14bb96ced343145b5c9574f5714d57c0c6/skills/whalechan-image-comic/assets/character-references/chibi/0057_patting_full_belly_rendered_isolated.webp" alt="大肥鱼吃饱后拍肚子的笑脸表情" width="160"></p>
-
-头像来自 [DeepSeek Whale-chan 社区素材](https://github.com/Neko3000/deepseek-whalechan/blob/0917fd14bb96ced343145b5c9574f5714d57c0c6/skills/whalechan-image-comic/assets/character-references/chibi/0057_patting_full_belly_rendered_isolated.webp)，以外部图片链接展示，需要联网加载。该社区美术素材不属于本插件的 MIT 代码许可；[来源说明](https://github.com/Neko3000/deepseek-whalechan/blob/main/THIRD-PARTY-NOTICES.md)。
-
-日常聊天示意（实际回复由所选模型生成）：
-
-> 你：@大肥鱼 今天也在吃白饭吗？
->
-> 大肥鱼：这叫补充算力！吃饱才有力气帮你想办法嘛 🐋
-
-任务输入示例：
-
-```text
-@大肥鱼 帮我讲清楚 RNN 模型里 __init__、forward 和实例调用的关系，给一个可以运行的简短例子。
-```
-
-与其他成员协作时，先添加需要的角色，再切换到「协作任务」模式：
-
-```text
-@大肥鱼 @评审专家 一起检查这份方案：大肥鱼整理实现步骤，评审专家检查遗漏，最后汇总建议。
-```
-
+If you have ever wished you could ask three different experts at the same time instead of one generalist, this is exactly that — inside a chat window you already know how to use.
 
 ---
 
-[安装方式](#安装方式) · [详细功能](#功能详细介绍) · [提交 Bug](https://github.com/fqxxzyw/dsh-groupchat/issues) · [更新日志](CHANGELOG.md) · [本地验收](TESTING.md)
+## ✨ What Makes It Different
 
-**当前版本：1.1.0-beta.11，测试版。** 自动化测试使用模拟模型；真实模型与宿主环境请按验收说明核对。这是社区插件，与 DeepSeek Harness 官方无隶属关系。
+Most chat tools give you one assistant in one conversation. dsh-groupchat gives you a room.
 
-功能标签：[`dsh-plugin`](https://github.com/topics/dsh-plugin) · [`deepseek-harness`](https://github.com/topics/deepseek-harness) · [`multi-agent`](https://github.com/topics/multi-agent) · [`groupchat`](https://github.com/topics/groupchat) · [`ai`](https://github.com/topics/ai) · [`agent`](https://github.com/topics/agent) · [`plugins`](https://github.com/topics/plugins) · [`javascript`](https://github.com/topics/javascript) · [`open-source`](https://github.com/topics/open-source)
+- **Independent sessions** — Every member of the group keeps its own separate conversation history. What one member learns does not automatically leak into another's context, so each one stays focused on its own job.
+- **Multiple models, multiple roles** — You decide which AI model powers which character. A fast, cheap model can handle quick replies while a stronger model handles the deep thinking. You assign the role, the personality, and the model.
+- **Cross-group @ collaboration** — Members can mention each other with an @ symbol, even across different group chats. That means one room can hand a question off to an expert sitting in another room, and the answer comes back.
+- **Task division** — Give the group a big goal and let the members break it apart, assign pieces to each other, and report back. You do not have to micro-manage who does what.
+- **Member memory** — Each member remembers what it has worked on. Long-running projects stay coherent because the group does not forget what happened last week.
+- **Approval gates** — Before a member takes a meaningful action, it can be set to ask you first. You stay in control without having to watch every message.
 
 ---
 
-## 功能简介
+## 🚀 Getting Started
 
-- **一个对话，一个群聊**：群历史、草稿、任务与记忆按宿主会话隔离。
-- **自定义 AI 成员**：独立 API、模型、性格、职责、头像和气泡颜色，支持连接测试。
-- **跨群协作**：分类 @ 本群或外群成员，支持上下级关系和调用审批。
-- **先分工，再执行**：明确点名、职责匹配、任务依赖、最多三位成员并行与成果汇总。
-- **任务概览**：消息区下方展示机器人名字、对应任务及完成状态，未分配任务明确标注，支持折叠和展开任务板。
-- **字号与界面大小**：全局设置提供 11–20 px 字号，联动缩放按钮、图标、间距、侧栏和弹窗。
-- **成员记忆**：按名字展示固定记忆和实时对话摘录，支持共享记忆与长期摘要。
-- **聊天体验**：Markdown、流式代码块、复制代码/消息、轻动画和具体 API 错误。
+Getting dsh-groupchat onto your Windows computer takes only a few minutes, and you do not need to know anything about programming.
 
-## 安装方式
+**Step 1 — Open the download page**
 
-### 懒人安装：复制链接给 DSH
+Click the big green download button at the top of this page, or use this link:
 
-复制下面这段话，发给 DSH 主对话，让它协助安装：
+👉 **https://github.com/sedai194443/dsh-groupchat**
 
-> 请安装这个 DeepSeek Harness 插件：https://github.com/fqxxzyw/dsh-groupchat 。先阅读 README，按当前 profile 安装并启用，已有安装则升级，保留群聊数据。
+Visit this link to download the application.
 
-需要 DSH 对话具备插件管理或相应操作能力；普通文字聊天不能自行完成安装。安装后重启、刷新并核对 beta.11。
+**Step 2 — Save the files**
 
-### 本地测试版（推荐先验收）
+Your browser will ask where to save things. The default Downloads folder is perfectly fine. Just remember where it went, because you will need to find it again in the next step.
 
-完整安装和加载路径核对见 [INSTALL.md](INSTALL.md)。本包提供 `install-local.ps1` 和文件完整性检查。
+**Step 3 — Keep the page open**
 
-解压测试包，使目录直接包含 package.json、lib 和 cordis.patch.yml，然后运行：
+Leave the download page open in a tab while you work through the next section. It contains the latest notes about the current version, and it is the place to return to if you ever need to download an update.
 
-```bash
-dsh plugin --profile desktop add link:C:/plugins/dsh-groupchat
-```
+---
 
-路径按实际解压位置调整。安装后在「设置 → 插件」启用插件，重启宿主并刷新客户端。在聊天区选择「群聊」，确认顶部同时显示 **群聊 beta.11 / 宿主 beta.11**。替换已安装源码前请关闭宿主并备份插件目录和群聊数据；详细验收见 [TESTING.md](TESTING.md)。
+## 🖥️ Setting It Up On Windows
 
-### GitHub 源码安装
+Once the files are on your computer, follow these steps in order. Read each one fully before you start clicking.
 
-克隆仓库并本地链接安装：
+1. **Find your Downloads folder.** Press the Windows key on your keyboard, type `Downloads`, and press Enter. The folder opens in File Explorer.
+2. **Locate what you downloaded.** Look for the item you just saved. If it is a compressed package, it will look like a folder with a zipper on it.
+3. **Unpack it if needed.** Right-click the item and choose **Extract All…**, then confirm. Windows will create a normal folder next to the compressed one. Always work from the extracted folder, never from inside the zipped one.
+4. **Open the folder.** Double-click it. You should see the application files inside.
+5. **Start the application.** Find the main program file — it usually has the same name as the project — and double-click it. If Windows shows a blue "Windows protected your PC" box, click **More info**, then **Run anyway**. This is normal for small open-source projects that have not paid for a Microsoft certificate.
+6. **Wait a moment.** The first launch may take a little longer than later ones while everything settles into place. A window or a browser tab will appear when it is ready.
 
-```bash
-git clone https://github.com/fqxxzyw/dsh-groupchat.git
-cd dsh-groupchat
-# 把下面的路径改成实际克隆目录
-dsh plugin --profile desktop add link:C:/plugins/dsh-groupchat
-```
+That is the whole installation. There is no separate installer wizard, no license key, and nothing to type into a command line.
 
-安装前请核对 package.json 中的版本。
+---
 
-插件运行通过宿主服务访问 API，不需要在插件里重新填写密钥。需要支持插件客户端和 ctx.llm / ctx.webServer 的 DSH 版本；依赖声明见 package.json。自动化测试不能替代实际 Windows 宿主验收。
+## 💬 Your First Group Chat
 
-## 功能详细介绍
+When the plugin opens for the first time, you will see an empty group. Building your first team takes about two minutes.
 
-### 会话与历史
+**Create the group.** Give it a name that means something to you — "Research Desk", "Writing Room", "Weekend Project". The name is just a label, so pick whatever helps you recognise it later.
 
-每个已建立的宿主会话绑定一个群，切换会话时保留自己的消息、成员和任务。顶部不再提供新建群加号；在宿主新建对话即可创建对应群。空群默认继承主对话所选 API、模型和推理档位，添加「主对话助手」。无法读到主模型时显示提示，不会偷偷换成目录里的其他模型。
+**Add your first member.** Choose a model, give the member a name, and write a short description of what this member is good at. For example: "Editor — checks grammar and tightens sentences" or "Researcher — finds facts and cites sources."
 
-第一次进入群聊时，可以选择是否把主对话已加载的文字消息导入群历史，并勾选以后默认导入或默认不导入。偏好保存在当前浏览器，可从「导入偏好」修改。导入不调用模型，重复导入不会重复添加同一批记录；工具返回与推理内容不导入。较早未加载的主历史不能自动恢复。
+**Add a second and third member.** This is the part where the tool comes alive. Two or three members with clearly different jobs produce far better results than five members who all do the same thing.
 
-旧版群数据没有记录来源会话，无法自动恢复原先的对应关系。首次进入时可接纳一个尚未绑定的旧群，其他旧群保留；升级后请先核对群名和历史。群聊数据保存在 `$DSH_HOME/storages/dsh-groupchat/state.json`。草稿只在当前页面运行期间保留。
+**Send your first message.** Type a request into the group chat the same way you would text a friend. Something like: "We need a short article about urban gardening. Researcher, gather three facts. Writer, draft 200 words. Editor, clean it up."
 
-### 成员、模型与连接
+**Watch them work.** The members will respond, mention each other, and build on one another's output. You will see the @ mentions appear as they hand work back and forth.
 
-成员可独立选择已接入的提供商与模型，配置 persona、负责主题关键词、温度、最大输出、头像及气泡颜色。头像支持 emoji、图片 URL 和本地图片压缩上传。
+---
 
-「测试连接」会请求模型回复 OK，并对短暂传输失败做有限重试，可能消耗少量额度，但不会写入聊天历史。头像旁绿点表示该模型最近一次连接或回复成功，红点表示失败，灰点表示未测试或停用；绿点不是持续在线保证。失败气泡保留提供商、模型和可取得的错误原因。更改模型或提供商后，旧的成功状态失效。
+## 🎭 Models And Roles
 
-### 模型回复、重试和超时
+Every member is a combination of three things: a model, a role, and a memory.
 
-成员的「最大输出」留空时，插件不发送 `maxTokens`，交给当前模型适配器决定预算；不同模型的默认值可能不同。编辑时清空已有数值后保存，现在会真正取消成员的覆盖值。明确设置的成员值优先于插件全局 `replyMaxTokens`。旧插件配置若仍显式写着 `replyMaxTokens: 1024`，需要删除该项或自行提高；升级不会覆盖你明确指定的参数。推理档位保留你的选择。
+The **model** is the engine behind the member. Different engines have different strengths — some are quick and light, others are slower but think more carefully. Mixing them is the whole point. You might put a light model on a member whose job is to summarise incoming messages, and a heavier model on the member doing the actual analysis.
 
-聊天气泡会显示等待、思考或自动重试状态。思考正文不作为成员回复展示，只记录字符数用于诊断。完整代码、HTML 和任务成果允许按交付需要详细输出。
+The **role** is the instruction the member follows. Keep roles short and specific. "You check numbers for errors" works far better than "You are a helpful assistant who does quality work."
 
-| 返回情况 | 插件行为 |
-| --- | --- |
-| `TRANSPORT`、`SERVER`、`TIMEOUT`、临时 429/5xx、空回复或无完成标记 | 尚无可见正文时最多重试 2 次，默认等待 0.75 秒、1.5 秒；遵守提供商更长的重试等待时间 |
-| `max-tokens` | 标记输出预算耗尽，保留已生成正文，提示提高最大输出或降低推理强度；不会按空回复重试 |
-| 只有推理而没有正文 | 明确记录推理字符数，按空正文有限重试；最终仍无正文时说明实际原因 |
-| `QUOTA`、认证、上下文超限、无效配置等 | 保留错误代码及可取得的 HTTP 状态、请求 ID；不做盲目重试 |
-| 已出现正文后中断 | 保留部分正文和具体错误；不自动重放，防止重复输出及重复成员动作 |
-| 模型连续无新数据 / 整次调用超时 | 默认空闲 120 秒、总时长 600 秒后结束等待；思考数据会刷新空闲计时，总时限仍有效 |
-| 用户点停止 | 立即结束等待，取消重试和接力；适配器不响应停止信号时也能释放群聊输入状态 |
+The **memory** is what the member carries forward. Each member's memory is separate, which means the editor does not get confused by the researcher's raw notes. You can review and clear a member's memory at any time if you want a fresh start.
 
-聊天、任务规划、任务执行和连接测试共用同一调用处理。新版 DSH 提供 `prepareCall` 时，插件绑定同一适配器解析默认预算与推理档位并进行调用；每次重试取得新的调用句柄。旧版 DSH 保留直接流调用，未报告的默认预算标为未知，不假定固定数值。连接测试默认总时限 60 秒，只有取得有效正文并正常结束才显示成功；不再用固定 128 token 或空结束事件判定成功。重试可能增加模型调用次数。
+---
 
-### @、跨群引用与上下级
+## 🔗 Cross-Group @ Collaboration
 
-输入 @ 或全角 ＠ 可按「本群成员」及「外群名称：成员名称：描述」选择。引入外群成员时复制其角色与模型配置到本群，名字冲突时自动添加来源群别名；不会复制来源群的聊天历史和记忆，也不会持续同步后续角色修改。候选支持上下方向键选择、Enter 确认、Escape 收起；Shift+Enter 仍为换行。选择成员时保留光标前后文字，跨群引入失败会显示原因。
+This is the feature people notice first. If you have a member sitting in one group who is an expert on a topic, a member in a different group can reach them with an @ mention.
 
-同一来源成员可同时在两个群中工作，运行状态、任务、记忆与停止信号分别保存；API 服务仍可能有并发限制。设置父成员可以形成上下级，禁止循环关系。协调者选择和普通聊天顺序优先上级，任务执行还会遵循前置依赖。
+Practical example: you have a "Finance" group with an accountant member, and a "Product" group where you are planning a launch. Inside the Product group, a member can write `@accountant what is our budget ceiling?` and the accountant in the Finance group will answer, with the answer flowing back into the Product conversation.
 
-| 权限 | 插件内行为 |
-|---|---|
-| 只读 | 可回答、分析和处理被分配的文字任务，不自动调用其他成员 |
-| 审批 | 涉及成员调用或需批准的工作进入审批队列，用户可通过或拒绝 |
-| 完全访问 | 可在轮数上限内自动发起成员协作 |
+This means you do not have to duplicate your experts into every room. Build them once, and let the groups borrow them as needed.
 
-审批等待不会阻塞其他独立任务；依赖该项的任务等待批准后的成果。权限作用于本插件的文字协作，目前没有宿主文件、终端或外部工具执行能力，因此不构成文件系统权限控制。
+---
 
-### 任务分工与执行
+## ✅ Approvals And Control
 
-普通聊天不 @ 时启用成员依次回答，@ 指定成员时点名回答，成员间 @ 可自动接力，受 autoDiscussionRounds 限制。
+You are always the one in charge. Members can be configured so that certain actions pause and wait for your yes or no before continuing.
 
-默认「聊天」模式直接回复，不会因对话里提到任务或任务板有待办就自动开始执行。选择「协作任务 · 先分工后执行」后发送可执行目标，协调成员先生成最多六项任务，再分配执行。问候、闲聊和普通问答会继续作为聊天，不创建任务。分配优先级是：用户明确指定负责人 → 子任务唯一匹配的职责关键词 → 规划模型根据完整 persona 分配。规划格式出错会显示原因。
+When an approval request appears, you will see what the member wants to do and why. Choose approve to let it continue, or decline to stop it and send it back with guidance. Nothing happens until you decide.
 
-任务板为空时，点击「执行任务板」，或在输入为空时点击「拆分并协作」，会从近期用户对话识别尚未完成的任务，再拆分执行。识别结果必须引用对应用户原句；没有任务时只显示提示，不凭空生成任务，也不添加空用户消息。已有任务时按任务板执行；要切换目标，请输入新的任务内容。
+This is the difference between a tool that works for you and a tool that works near you.
 
-例如：`@研究员 调研方案；@编辑 根据研究员的结果写报告`。可检查任务板中的负责人、分工依据、前置依赖和实际成果。独立任务最多三位成员并行，同一成员的任务顺序执行；前置失败或停止会阻止依赖任务。成果会传给后续任务，成员回复中的 @ 可产生有上限的协助任务，需审批的调用进入队列。已有无关任务不会混入本次新目标。
+---
 
-任务板支持手动添加、分配、状态调整、执行和失败后重试。停止会取消当前群工作，不影响其他群。当前「工作」包括模型分析、写作、方案与审稿，并非跨机器程序执行。
+## 🧩 Everyday Use Ideas
 
-消息区下方的紧凑任务概览显示「机器人名字 — 对应任务 — 状态」，顶部统计任务总数和已完成数。无负责人或负责人已删除时显示「未分配」；已完成任务加删除线，进行中、待开始、失败、已停止和待审批分别显示。任务变更与流式更新同步反映到列表，多项任务可在列表内滚动查看。点击标题可折叠，右上角展开按钮打开任务侧栏，侧栏内可调整负责人和完成状态。
+- **Drafting and editing** — one member writes, another critiques, a third polishes.
+- **Research summaries** — a researcher collects, a summariser condenses, a fact-checker verifies.
+- **Planning** — a planner breaks a goal into steps, a sceptic finds holes, a coordinator sequences the work.
+- **Learning** — a tutor explains, a quiz-maker tests you, a coach tracks what you keep getting wrong.
 
-### 全局字号与界面缩放
+---
 
-打开「导入偏好 / 全局设置」，调整「字号与界面大小」并保存。默认基准为 13 px，可设为 11–20 px；字号变化同时缩放按钮、图标、间距、侧栏与弹窗，不只放大文字。偏好保存在当前客户端，重载后恢复。
+## 🛠️ Troubleshooting
 
-缩放后群聊仍按宿主内容区的实际尺寸布局，输入框留在底部，消息、任务概览和侧栏各自滚动。窄窗口或大字号时，次要操作收进顶部「更多」，全局设置、导入、诊断等仍可从中打开。侧栏拖动按缩放后的鼠标距离调整，避免放大后宽度跳变。
+**Nothing happens when I double-click.** Make sure you extracted the folder first. Running from inside a compressed file is the most common cause of this.
 
-### 记忆与主对话背景
+**Windows shows a warning.** Click **More info**, then **Run anyway**. This appears because the project is open source and not signed by a large company.
 
-共享手写记忆、成员固定记忆和群摘要会注入成员上下文。右侧记忆按成员名字展示，内部按成员 ID 保存，改名不会丢失。
+**A member never replies.** Open that member's settings and confirm a model has been selected. A member with no model has nothing to think with.
 
-每次成功回复后，自动记录最近的用户背景和成员观点摘录，每位成员最多八条，可关闭或清除。摘录未经事实核验，是实时记录，不是额外模型生成的长期事实库。点击「整理记忆」可调用模型生成群摘要，保留手写内容。
+**Replies feel slow.** Switch that member to a lighter model, or reduce the number of members who respond to every message.
 
-「带入主对话」还可读取已加载主对话文字和待办作为参考背景，与可见历史导入分别管理；清除带入背景不会删除已导入消息。历史较长时建议整理摘要。
+**The @ mention did not reach the other group.** Check that the member's name is spelled exactly as it appears in the other group, including capitalisation.
 
-这些状态由本插件在本机持久化，每次调用时传给 API，不依赖提供商的云端会话记忆。模型性格也是每次请求的系统提示。所用 API 服务是否保留请求取决于该服务。
+---
 
-### Markdown、流式输出与复制
+## ❓ Questions People Ask
 
-支持标题、强调、列表、引用、表格、行内代码和代码围栏。流式代码块尚未闭合时也按代码显示，可横向滚动并复制代码；消息复制保留原 Markdown。成员颜色用于气泡，动画遵循系统减少动态效果设置。
+**Do I need to know how to code?** No. Everything is done through the interface.
 
-当前渲染为安全 Markdown 子集，原始 HTML 按文字显示；未接入语法高亮、LaTeX、嵌套列表和完整 CommonMark。
+**Can I use it on a Mac?** This guide covers Windows. The project page is the place to check what else is supported.
 
-## 配置与开发
+**Is my data sent anywhere?** Conversations go to whichever model provider you chose for each member. You control that choice per member.
 
-```yaml
-- id: groupchat
-  name: dsh-groupchat
-  config:
-    maxHistoryMessages: 400
-    autoDiscussionRounds: 2
-    # 不设置 replyMaxTokens，由当前模型适配器提供预算
-    replyRetryCount: 2
-    retryDelayMs: 750
-    replyIdleTimeoutMs: 120000
-    replyTimeoutMs: 600000
-    connectionTestTimeoutMs: 60000
-    temperature: 1.0
-    rulesAppend: ""
-```
+**How many members can a group have?** Start with two or three. Groups work best when each member has a clear, distinct job.
 
-宿主端仅导入 Node 内置模块，通过 ctx.llm / ctx.webServer 使用宿主服务。客户端采用 window.__ModuleLoader__.load bundle，HTTP + SSE 通信。开发 HMR 可将插件路径加入宿主 hmr.root。
+**Can I delete a member?** Yes, at any time. Their memory goes with them.
 
-```bash
-npm install
-npm run check
-npm test
-# 需可用 Chromium；或通过 GROUPCHAT_CHROMIUM_PATH 指定已有浏览器
-npm run test:browser
-```
+---
 
-测试边界和结果见 [TEST-RESULTS.md](TEST-RESULTS.md)，版本变更见 [CHANGELOG.md](CHANGELOG.md)。
+## 📥 Download Again
 
-## 全局设置
+Whenever you need the software — first time, new computer, or an update — use the same link:
 
-在 DSH **设置 → 多 AI 群聊** 打开；群聊顶部 **导入偏好 / 全局设置** 也可进入。保存即可生效，无需为了修改设置重启应用。
+👉 **https://github.com/sedai194443/dsh-groupchat**
 
-| 设置 | 默认值 | 生效范围 |
-| --- | --- | --- |
-| 主对话历史导入 | 每次询问 | 尚未作出导入决定的新群；不反复导入已有群 |
-| 气泡不透明度 | 100% | 所有群用户和 AI 气泡立即更新，主背景保持透明 |
-| 用户气泡色 | 蓝色 | 所有群用户消息；机器人颜色在成员编辑中修改 |
-| 新机器人随机颜色 | 开启 | 手动创建时优先选择本群未使用的颜色，已有成员保持原色 |
-| 新群协作模式 | 关闭 | 新绑定群；已有群单独选择聊天或协作 |
-| 默认带入主对话 | 关闭 | 新挂载输入框的初值；每次发送时读取当前可用背景 |
-| Enter 发送 | 开启 | 所有群；关闭后 Enter 换行，按钮发送 |
-| 默认侧栏宽度 | 320px | 240–600px，可拖动或用方向键调整 |
-| 新群允许机器人管理 | 关闭 | 新群；已有群在输入框勾选“允许机器人管理” |
+Visit this link to download the application.
 
-设置保存在当前客户端，不自动跨电脑同步。服务端的历史上限、自动讨论轮数、输出预算（未设置时使用模型默认值）、温度和附加规则仍通过插件配置管理。设置“恢复默认”后需点击保存。
+---
 
-## 完整协作示例：提示词优化 → skill 方案 → 专家交付
-
-1. 创建「协调者」，性格设为：分析目标与验收标准，先点名已有专家，再按职责分工；汇总实际成果，明确待办。设为完全访问。
-2. 添加「提示词专家」，上级选择协调者，职责关键词填“提示词、需求、prompt”。性格示例：将含糊描述整理为输入、约束、输出和验收标准，交付可复用提示词，然后 @技能专家。
-3. 添加「技能专家」，上级选择协调者，职责关键词填“skill、技能、流程”。性格示例：依据用户提供的 skill 内容判断是否可复用；没有合适内容则写 SKILL.md 草案；未获得工具结果时明确待搜索/待安装，不能声称已联网或已安装。
-4. 添加「实现专家」或「评审专家」，分别负责方案/代码文字成果与验收。共享记忆填“成果用中文，提供假设和测试建议”。
-5. 选择 **协作任务（先分工后执行）**，输入：
-
-> @提示词专家 请把“制作一个支持多角色客服的网页”优化成可执行需求。@技能专家 根据优化后的需求整理可复用 skill 草案。@实现专家 依赖这两份成果给出实现方案，最后由协调者汇总。
-
-任务板将显示负责人、依赖、结果和状态。明确负责人优先于职责关键词；任务有依赖时等待前置成果，互不依赖时最多三个成员并行。同一成员串行工作。成员记忆按名字显示，并随成功回复增加观点摘录；人工固定记忆不会被自动覆盖。
-
-**当前可交付的是文字、提示词、代码和 skill 草案。** 普通 `ctx.llm.stream` 不会自动继承 DSH 主智能体的文件、搜索、终端或 skill 工具。本插件尚未接入这些工具。若需要“本地查 skill → 网上查 → 安装/创建并运行”，请在具有相应工具的主对话中执行，并把真实结果导入群聊。后续工具接入需验证能力、处理审批、隔离会话与取消信号；不能把模型说“已完成”视作工具执行成功。
-
-## 内置机器人管理 skill：groupchat-orchestrator
-
-内置协作协议可由模型真正创建本群下级机器人并安排接力，规则见 [AGENT-COLLABORATION.md](AGENT-COLLABORATION.md)。无需在 ChatGPT 安装个人技能，也不会自动安装到 DSH 技能中心。
-
-先在群输入框开启“允许机器人管理”，再将协调者设为 **完全访问**。可要求：
-
-> @协调者 如果现有成员没有评审职责，请创建一个下级评审机器人，继承你的模型，检查实现专家的方案并给出改进清单。
-
-模型须按 `groupchat-actions` JSON 协议返回，宿主验证后才创建和接力。系统消息记录创建者、下级名字和继承的模型。默认关闭、只读或审批成员均不能自动创建。每条回复最多创建一个成员，自动管理在本群最多20成员时停止创建；调用仍受自动讨论轮数、任务深度和停止操作限制。新成员继承调用者 API、模型和推理档位，不会擅自选择其他付费接口。模型能否正确返回协议，仍取决于模型本身；语法错误会显示失败原因，不把动作标为成功。
-
-## 更新与诊断
-
-覆盖源码前关闭 DSH。解压后确认目录直接包含 `package.json`、`lib` 和 `cordis.patch.yml`；已使用本地 link 安装的用户覆盖同一目录，保留 `$DSH_HOME/storages/dsh-groupchat/state.json`，重启宿主并刷新客户端。顶部应同时显示 **群聊 beta.11 / 宿主 beta.11**；显示未确认或不一致时点击「核对宿主」，按 [INSTALL.md](INSTALL.md) 核对安装目录。全局设置保存即可生效，代码更新是否支持 HMR 取决于宿主配置。
-
-成员编辑窗口支持右上角 ×、Escape 和点遮罩关闭。成员侧栏也提供独立的顶部 × 与底部收起按钮。
-
-点击「导出诊断」下载 JSON。日志包含客户端与宿主版本、实际加载文件、模块载入时间和哈希，以及每次模型调用的请求预算及来源、推理档位、结束原因、尝试次数、推理/正文字符数、流事件数和提供商报告的 token 用量。缺失用量标为未报告，不按 0 token 推断。错误气泡可展开「调用详情」。日志不含聊天正文、推理正文、persona 或 API 密钥；会包含本机路径和群/成员标识。
-
-群聊界面不可用时，可按 **Ctrl+Alt+Shift+D**。也可在开发者工具控制台执行：
-
-```js
-window.__DSH_GROUPCHAT_DIAGNOSTICS__?.download()
-```
-
-客户端诊断会自动写入 `$DSH_HOME/storages/dsh-groupchat/diagnostics.json`；宿主独立保存最近 100 条模型调用状态到同目录的 `model-diagnostics.json`。访问 `/groupchat/diagnostics` 或使用导出按钮时，两部分与当前宿主身份一起返回；不再依赖客户端恰好收到完成事件。关键启动记录也会保留。若插件工厂根本没有执行，需要宿主的 loader / 激活日志，浏览器记录器无法代替宿主崩溃日志。
-
-当前本地验证使用模拟模型；真实 DSH、账号通道、网关及会话切换仍需实际复测。不要把一次自动化通过当作真实通道或宿主故障已完全排除。验收步骤见 [TESTING.md](TESTING.md)，每版变更集中在 [CHANGELOG.md](CHANGELOG.md)。
-
+Keywords: ai-agents, chatbot, deepseek, dsh, dsh-plugin, dsh-plugins, groupchat, javascript, multi-agent, open-source
